@@ -1,0 +1,9 @@
+modules:
+    auth_client: true
+    booking: true
+    room: true
+    payment: true
+    cleaning: true
+    inventory: true
+    report: true
+

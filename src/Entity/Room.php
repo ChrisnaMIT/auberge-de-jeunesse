@@ -21,6 +21,10 @@ class Room
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
+
+
     #[ORM\Column(options: ['default' => false])]
     private bool $isMixed = false;
 

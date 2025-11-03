@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste des commodités{% endblock %}
+
+{% block body %}
+    <section class="py-5" style="background: #f3f4f6;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-dark">Liste des commodités</h2>
+                <a href="{{ path('app_amenity_create') }}" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">
+                    + Nouvelle commodité
+                </a>
+            </div>
+
+            {% if amenities is empty %}
+                <div class="text-center text-secondary py-5">
+                    <p>Aucune commodité enregistrée.</p>
+                    <a href="{{ path('app_amenity_create') }}" class="btn btn-outline-primary mt-3 px-4">Ajouter la première</a>
+                </div>
+            {% else %}
+                <div class="row g-4">
+                    {% for amenity in amenities %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card border-0 shadow-sm rounded-4 h-100">
+                                <div class="card-body">
+                                    <h5 class="fw-bold text-dark">{{ amenity.name }}</h5>
+                                </div>
+                                <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                                    <a href="{{ path('app_amenity_show', {'id': amenity.id}) }}" class="btn btn-sm btn-outline-primary">Voir</a>
+                                    <a href="{{ path('app_amenity_edit', {'id': amenity.id}) }}" class="btn btn-sm btn-outline-secondary">Modifier</a>
+                                    <a href="{{ path('app_amenity_delete', {'id': amenity.id}) }}" class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('Supprimer cette commodité ?')">Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <style>
+        body { background: #f3f4f6; font-family: "Inter", sans-serif; }
+        .card { transition: 0.3s ease; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+    </style>
+{% endblock %}

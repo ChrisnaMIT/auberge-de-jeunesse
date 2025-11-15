@@ -1,0 +1,41 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+{% block body %}
+    <h1 class="fw-bold mb-4">Liste des lits</h1>
+
+    <a href="{{ path('app_bed_new', { room: defaultRoomId ?? 1 }) }}" class="btn btn-primary mb-3">
+        + Ajouter un lit
+    </a>
+
+    <div class="row">
+        {% for bed in beds %}
+            <div class="col-md-3">
+                <div class="bg-white p-3 rounded shadow-sm mb-3">
+
+                    <h5 class="fw-bold">Lit {{ bed.number }}</h5>
+
+                    {% if bed.status == 'available' %}
+                        <span class="badge bg-success">Disponible</span>
+                    {% elseif bed.status == 'occupied' %}
+                        <span class="badge bg-danger">Occupé</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Maintenance</span>
+                    {% endif %}
+
+                    <p class="mt-2 mb-1 text-muted">
+                        Chambre : {{ bed.room.name }}
+                    </p>
+
+                    <div class="mt-2">
+                        <a href="{{ path('app_bed_show', {id: bed.id}) }}" class="btn btn-sm btn-primary">Voir</a>
+                        <a href="{{ path('app_bed_edit', {id: bed.id}) }}" class="btn btn-sm btn-secondary">Modifier</a>
+                    </div>
+
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun lit trouvé.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+

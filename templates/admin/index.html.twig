@@ -1,0 +1,98 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+
+{% block title %}Administration — Gestion des rôles{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+
+        <h1 class="mb-4 fw-bold">Gestion des utilisateurs</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <table class="table table-striped align-middle">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Rôle actuel</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+
+                            <td>{{ user.email }}</td>
+
+                            <td>
+                                {% if 'ROLE_ADMIN' in user.roles %}
+                                    <span class="badge bg-danger">Admin</span>
+                                {% elseif 'ROLE_MANAGER' in user.roles %}
+                                    <span class="badge bg-primary">Manager</span>
+                                {% elseif 'ROLE_EMPLOYEE' in user.roles %}
+                                    <span class="badge bg-warning text-dark">Employé</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Utilisateur</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-end">
+
+                                {# --- ADMIN --- #}
+                                {% if 'ROLE_ADMIN' in user.roles %}
+                                    <a href="{{ path('app_demote_admin', { id: user.id }) }}"
+                                       class="btn btn-outline-danger btn-sm">
+                                        Retirer Admin
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('app_promote_admin', { id: user.id }) }}"
+                                       class="btn btn-danger btn-sm">
+                                        Promouvoir Admin
+                                    </a>
+                                {% endif %}
+
+                                {# --- MANAGER --- #}
+                                {% if 'ROLE_MANAGER' in user.roles %}
+                                    <a href="{{ path('app_demote_manager', { id: user.id }) }}"
+                                       class="btn btn-outline-primary btn-sm">
+                                        Retirer Manager
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('app_promote_manager', { id: user.id }) }}"
+                                       class="btn btn-primary btn-sm">
+                                        Promouvoir Manager
+                                    </a>
+                                {% endif %}
+
+                                {# --- EMPLOYEE --- #}
+                                {% if 'ROLE_EMPLOYEE' in user.roles %}
+                                    <a href="{{ path('app_demote_employee', { id: user.id }) }}"
+                                       class="btn btn-outline-warning btn-sm">
+                                        Retirer Employé
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('app_promote_employee', { id: user.id }) }}"
+                                       class="btn btn-warning btn-sm text-dark">
+                                        Promouvoir Employé
+                                    </a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">Aucun utilisateur trouvé.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+{% block body %}
+    <h1 class="fw-bold mb-4">Ajouter un lit</h1>
+
+    <div class="bg-white p-4 rounded shadow-sm" style="max-width: 500px;">
+
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_label(form.number, 'Numéro du lit') }}
+            {{ form_widget(form.number, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.status, 'Statut') }}
+            {{ form_widget(form.status, { 'attr': {'class': 'form-select'} }) }}
+        </div>
+
+        <button class="btn btn-primary">Créer</button>
+
+        {{ form_end(form) }}
+
+    </div>
+
+    <a href="{{ path('app_room_show', {id: room.id}) }}" class="btn btn-outline-primary mt-3">
+        Retour à la chambre
+    </a>
+
+{% endblock %}

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Room\Entity;
+namespace App\Entity;
 
-use App\Modules\Room\Repository\RoomRepository;
+use App\Repository\RoomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,10 +49,19 @@ class Room
     #[ORM\OneToMany(targetEntity: Bed::class, mappedBy: 'room', orphanRemoval: true)]
     private Collection $beds;
 
+
+    /**
+     * @var Collection<int, Booking>
+     */
+    #[ORM\OneToMany(mappedBy: 'room', targetEntity: Booking::class, cascade: ['remove'])]
+    private Collection $bookings;
+
+
     public function __construct()
     {
         $this->amenities = new ArrayCollection();
         $this->beds = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,4 +197,46 @@ class Room
 
         return $this;
     }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): static
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): static
+    {
+        if ($this->bookings->removeElement($booking)) {
+            if ($booking->getRoom() === $this) {
+                $booking->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

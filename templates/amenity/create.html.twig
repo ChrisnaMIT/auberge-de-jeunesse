@@ -1,0 +1,35 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+{% block title %}Créer une commodité{% endblock %}
+
+{% block body %}
+    <section class="d-flex align-items-center justify-content-center min-vh-100" style="background: #f3f4f6;">
+        <div class="card shadow-lg border-0 rounded-4 p-5" style="max-width: 600px; width: 100%;">
+            <h2 class="fw-bold text-center mb-4 text-dark">Ajouter une nouvelle commodité</h2>
+
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="mb-4">
+                {{ form_label(form.name, 'Nom de la commodité', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-lg'}}) }}
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ path('app_amenity') }}" class="btn btn-outline-secondary px-4 py-2">← Retour</a>
+                <button class="btn btn-primary px-5 py-2 fw-semibold shadow-sm">Enregistrer</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </section>
+
+    <style>
+        body { background-color: #f3f4f6; font-family: "Inter", sans-serif; }
+        .card { animation: fadeIn 0.5s ease; }
+        .btn-primary { background-color: #2563eb; border: none; border-radius: 0.5rem; transition: 0.3s; }
+        .btn-primary:hover { background-color: #1d4ed8; transform: translateY(-1px); }
+        .form-control { border-radius: 0.5rem; padding: 0.75rem 1rem; border: 1px solid #d1d5db; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+{% endblock %}

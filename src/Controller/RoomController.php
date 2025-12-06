@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Bed;
 use App\Entity\Room;
 use App\Form\RoomType;
 use App\Repository\RoomRepository;
@@ -21,6 +22,16 @@ final class RoomController extends AbstractController
         ]);
     }
 
+    #[Route('/rooms', name: 'client_rooms')]
+    public function clientRooms(RoomRepository $roomRepository): Response
+    {
+        $rooms = $roomRepository->findAll();
+
+        return $this->render('client/rooms/index.html.twig', [
+            'rooms' => $rooms,
+        ]);
+    }
+
     //
 
 
@@ -33,6 +44,22 @@ final class RoomController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($room);
             $manager->flush();
+            // Auto-générer les lits si c'est un dortoir
+            if ($room->getType() === 'dorm' && $room->getNumberOfBeds() > 0) {
+
+                for ($i = 1; $i <= $room->getNumberOfBeds(); $i++) {
+
+                    $bed = new Bed();
+                    $bed->setNumber($i);
+                    $bed->setStatus("available");
+                    $bed->setRoom($room);
+
+                    $manager->persist($bed);
+                }
+
+                $manager->flush();
+            }
+
             return $this->redirectToRoute('app_room_show', ['id' => $room->getId()]);
         }
         return $this->render('room/create.html.twig', [

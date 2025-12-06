@@ -1,0 +1,101 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+
+{% block title %}Créer une nouvelle chambre{% endblock %}
+
+{% block body %}
+    <section class="d-flex align-items-center justify-content-center min-vh-100" style="background: #f3f4f6;">
+        <div class="card shadow-lg border-0 rounded-4 p-5" style="max-width: 800px; width: 100%; background: white;">
+            <h2 class="fw-bold text-center mb-4 text-dark">Créer une nouvelle chambre</h2>
+
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    {{ form_label(form.name, 'Nom de la chambre', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Ex: Chambre double 101'}}) }}
+                </div>
+
+                <div class="col-md-6">
+                    {{ form_label(form.type, 'Type de chambre', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.type, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Privée ou Dortoir'}}) }}
+                </div>
+
+                <div class="col-md-6">
+                    {{ form_label(form.pricePerNight, 'Prix par nuit (€)', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.pricePerNight, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Ex: 45.00'}}) }}
+                </div>
+
+                <div class="col-md-6">
+                    {{ form_label(form.numberOfBeds, 'Nombre de lits', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.numberOfBeds, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Ex: 6'}}) }}
+                </div>
+
+                <div class="col-12">
+                    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control form-control-lg', 'rows': 3, 'placeholder': 'Détails, vue, équipements...'}}) }}
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-check mt-4">
+                        {{ form_widget(form.isMixed, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(form.isMixed, 'Dortoir mixte', {'label_attr': {'class': 'form-check-label ms-2 fw-semibold'}}) }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.status, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                </div>
+
+                <div class="col-12 mt-3">
+                    <h5 class="fw-semibold text-secondary mb-2">Commodités</h5>
+                    <div class="p-3 bg-light rounded-3 border">
+                        {{ form_widget(form.amenities) }}
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ path('app_room') }}" class="btn btn-outline-secondary px-4 py-2">← Retour</a>
+                    <a href="{{ path('app_amenity') }}" class="btn btn-outline-secondary px-4 py-2">Ajouter des commodités</a>
+                    <button class="btn btn-primary px-5 py-2 fw-semibold shadow-sm">Enregistrer la chambre</button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </section>
+
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: "Inter", sans-serif;
+        }
+        .card {
+            animation: fadeIn 0.5s ease;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            border: none;
+            border-radius: 0.5rem;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+        }
+        .form-check-input {
+            width: 1.3em;
+            height: 1.3em;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+{% endblock %}
+

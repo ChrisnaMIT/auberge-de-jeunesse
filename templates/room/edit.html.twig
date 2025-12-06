@@ -1,0 +1,29 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+{% block title %}Modifier la chambre{% endblock %}
+
+{% block body %}
+    <section class="d-flex align-items-center justify-content-center min-vh-100" style="background: #f3f4f6;">
+        <div class="card shadow-lg border-0 rounded-4 p-5" style="max-width: 800px; width: 100%;">
+            <h2 class="fw-bold text-center mb-4 text-dark">Modifier la chambre</h2>
+
+            {{ form_start(room, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="row g-3">
+                {{ form_widget(room) }}
+                <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ path('app_room_show', {'id': room.vars.value.id}) }}" class="btn btn-outline-secondary px-4 py-2">← Annuler</a>
+                    <button class="btn btn-primary px-5 py-2 fw-semibold shadow-sm">Mettre à jour</button>
+                </div>
+            </div>
+            {{ form_end(room) }}
+        </div>
+    </section>
+
+    <style>
+        body { background-color: #f3f4f6; font-family: "Inter", sans-serif; }
+        .card { animation: fadeIn 0.5s ease; }
+        .btn-primary { background-color: #2563eb; border: none; border-radius: 0.5rem; transition: 0.3s; }
+        .btn-primary:hover { background-color: #1d4ed8; transform: translateY(-1px); }
+        .form-control, .form-select { border-radius: 0.5rem; padding: 0.75rem 1rem; border: 1px solid #d1d5db; }
+    </style>
+{% endblock %}

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EasyPMS{% endblock %}</title>
+
+    <link rel="icon" href="data:image/svg+xml,
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
+            <text y='1.2em' font-size='96'>⚫️</text>
+            <text y='1.3em' x='0.2em' font-size='76' fill='#fff'>sf</text>
+        </svg>">
+
+    {# CSS/TWIG BLOCKS #}
+    {% block stylesheets %}{% endblock %}
+
+    {# JavaScript Importmap (Symfony 7) #}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+
+    {# Flatpickr #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+
+    {# Bootstrap 5 + Icons #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f6f8;
+            margin: 0;
+        }
+
+
+        /* ---------------------- SIDEBAR ---------------------- */
+        .sidebar {
+            width: 240px;
+            background: #1f2937;
+            min-height: 100vh;
+            color: #cbd5e1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 10px;
+            transition: 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: #ffffff;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            margin: 12px 0 8px 20px;
+            color: #9ca3af;
+        }
+
+        /* ---------------------- TOPBAR ---------------------- */
+        .topbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: fixed;
+            left: 240px;
+            right: 0;
+            top: 0;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 50;
+        }
+
+        .module-bar {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .module-item {
+            text-align: center;
+            color: #444;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .module-item:hover {
+            color: #000;
+        }
+
+        .module-item i {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* ---------------------- CONTENT ---------------------- */
+        .content {
+            margin-left: 240px;
+            padding: 100px 30px 30px;
+            min-height: 100vh;
+        }
+    </style>
+
+</head>
+<body>
+
+{# ------------------------- SIDEBAR ------------------------- #}
+<div class="sidebar">
+
+    <div class="px-4 mb-4">
+        <h4 class="text-white fw-bold">EasyPMS</h4>
+    </div>
+
+    <div class="sidebar-title">Menu</div>
+    <a href="#"><i class="bi bi-gear me-2"></i> Dashboard</a>
+    {# Résumé global de l'auberge nbr checkIn/Out revenus etc  #}
+
+    <a href="{{ path('app_booking') }}"><i class="bi bi-calendar-check me-2"></i> Reservation V </a>
+    {# Liste de toutes les réservation page de tous les réservation et on pourra CRUD #}
+
+    <a href="{{ path('app_room') }}"><i class="bi bi-calendar-check me-2"></i> Rooms V</a>
+    {# Liste de toutes les rooms chambre/dortoir, CRUD aussi  #}
+
+    <a href="#"><i class="bi bi-person-vcard me-2"></i> Front Desk</a>
+    {# page utiliser pour la reception, on pourra s'ocuper des checkIn/Out, assigner des rooms sur place  #}
+
+    <a href="#"><i class="bi bi-cash-coin me-2"></i> Front Cash</a>
+    {# Page utiliser pour le paiement pour la recpetion etc #}
+
+    <a href="#"><i class="bi bi-bucket me-2"></i> Housekeeping</a>
+    {# Liste des taches comme le nettoyage, assgination du staff etc  #}
+
+    <div class="sidebar-title">Operations</div>
+    <a href="#"><i class="bi bi-wrench-adjustable me-2"></i> Technical Service</a>
+    {#  #}
+
+    <a href="#"><i class="bi bi-people me-2"></i> CRM Gestion client </a>
+    {# Gestion des clients, fiche des clients, historique des sejours,  #}
+
+    <a href="#"><i class="bi bi-clock-history me-2"></i> Night Audit</a>
+    {# Ajouter la fonctionnalité de faire le compte tous les soirs #}
+
+    <a href="#"><i class="bi bi-file-earmark-text me-2"></i> Contract Mgmt</a>
+    {# Pour les hôtels/auberge qui ont des partenariats #}
+
+    <a href="#"><i class="bi bi-pie-chart me-2"></i> Sales & Marketing</a>
+    {# Crud pour des codes promo/ voir les stats de vente  #}
+
+    <a href="#"><i class="bi bi-calculator me-2"></i> Accounting</a>
+    {#  #}
+
+    <a href="#"><i class="bi bi-credit-card me-2"></i> POS Restau</a>
+    {# Pour bar/restau encaissement / ticket / CRUD produit #}
+
+</div>
+
+{# ------------------------- TOPBAR ------------------------- #}
+<div class="topbar">
+
+    <div class="module-bar">
+
+        <div class="module-item">
+            <i class="bi bi-speedometer2"></i> ?
+        </div>
+        {# Status Voir en un clique quelle chambre sont prise, et voir les arrivées et les départs #}
+
+        <div class="module-item">
+            <i class="bi bi-currency-dollar"></i> ?
+        </div>
+        {# Price pourvoir changer les prix rapidement des rooms #}
+
+        <a href="{{ path('app_admin') }}" class="module-item">
+            <i class="bi bi-graph-up"></i>
+            ?
+        </a>
+        {# Admin  #}
+
+        <div class="module-item">
+            <i class="bi bi-grid"></i>  ?
+        </div>
+        {#  RAck Voir le calendrier  #}
+
+
+        <a href="{{ path('app_booking') }}" class="module-item">
+            <i class="bi bi-calendar-event"></i>
+            ?
+        </a>
+        {# Booking Création d'une rservation  #}
+
+        <div class="module-item">
+            <i class="bi bi-shop"></i> ?
+        </div>
+        {#  POS Point of sale/ Point de vente/ Page pour la vente de produit  #}
+
+        <div class="module-item">
+            <i class="bi bi-list-check"></i> ?
+        </div>
+        {# Liste des taches à faire  #}
+
+    </div>
+
+    <div>
+        <span class="me-3 text-muted">Profile</span>
+        <img src="https://i.pravatar.cc/40" class="rounded-circle" width="40" height="40">
+    </div>
+</div>
+
+{# ------------------------- MAIN CONTENT ------------------------- #}
+<div class="content">
+    {% block body %}{% endblock %}
+</div>
+
+{# ------------------------- SCRIPTS ------------------------- #}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        flatpickr('.datepicker', {
+            dateFormat: 'Y-m-d',
+            minDate: 'today',
+            locale: 'fr',
+            disableMobile: true
+        });
+    });
+</script>
+
+</body>
+</html>

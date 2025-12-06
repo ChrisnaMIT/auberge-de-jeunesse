@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Entity\Room;
 use App\Form\BookingType;
 use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,16 +30,52 @@ final class BookingController extends AbstractController
         $booking = new Booking();
         $form = $this->createForm(BookingType::class, $booking);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+
             $booking->calculateTotalPrice();
+            $room = $booking->getRoom();
+
+
+            $availableBeds = $room->getBeds()->filter(fn($bed) =>
+                $bed->getStatus() === 'available'
+            );
+
+            if (count($availableBeds) < $booking->getNumberOfBedsReserved()) {
+                $this->addFlash('error', "Pas assez de lits disponibles dans cette chambre !");
+                return $this->redirectToRoute('app_booking_create');
+            }
+
+            $availableBedsArray = $availableBeds->toArray();
+
+            usort($availableBedsArray, fn($a, $b) =>
+                $a->getNumber() <=> $b->getNumber()
+            );
+
+
+            $selectedBeds = array_slice($availableBedsArray, 0, $booking->getNumberOfBedsReserved());
+
+
+            foreach ($selectedBeds as $bed) {
+                $booking->addBed($bed);
+                $bed->setStatus('occupied');
+                $manager->persist($bed);
+            }
+
             $manager->persist($booking);
             $manager->flush();
-            return $this->redirectToRoute('app_booking_show', ['id' => $booking->getId()]);
+
+            return $this->redirectToRoute('app_booking_show', [
+                'id' => $booking->getId(),
+            ]);
         }
+
         return $this->render('booking/create.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+
+
 
     //
 

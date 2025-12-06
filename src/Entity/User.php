@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Auth\Entity;
+namespace App\Entity;
 
-use App\Modules\Auth\Repository\UserRepository;
+use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -43,10 +43,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $lastname = null;
 
     public function getId(): ?int

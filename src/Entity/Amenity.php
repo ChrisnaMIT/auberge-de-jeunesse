@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Room\Entity;
+namespace App\Entity;
 
-use App\Modules\Room\Repository\AmenityRepository;
+use App\Repository\AmenityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

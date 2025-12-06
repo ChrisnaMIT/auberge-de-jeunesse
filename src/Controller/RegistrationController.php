@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\Auth;
+namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Modules\Auth\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,7 @@ class RegistrationController extends AbstractController
 
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('_profiler_exception');
+            return $this->redirectToRoute('app_room');
         }
 
         return $this->render('registration/register.html.twig', [

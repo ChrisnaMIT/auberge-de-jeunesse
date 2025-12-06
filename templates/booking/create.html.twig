@@ -1,0 +1,43 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+
+{% block title %}Créer une réservation{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 d-flex justify-content-center">
+        <div class="card shadow p-4 w-75">
+            <h1 class="mb-4 text-center">Créer une réservation</h1>
+
+            {{ form_start(form) }}
+            <div class="mb-3">
+                {{ form_label(form.room) }}
+                {{ form_widget(form.room, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.checkIn) }}
+                {{ form_widget(form.checkIn, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.checkOut) }}
+                {{ form_widget(form.checkOut, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.numberOfBedsReserved) }}
+                {{ form_widget(form.numberOfBedsReserved, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.status) }}
+                {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+            </div>
+
+            <button class="btn btn-primary w-100">Enregistrer la réservation</button>
+            <a href="{{ path('app_booking')}}" class="text-blue-600 hover:underline">Retour</a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

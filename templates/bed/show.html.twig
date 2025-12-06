@@ -1,0 +1,27 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+{% block body %}
+    <h1 class="fw-bold mb-4">Lit {{ bed.number }}</h1>
+
+    <div class="bg-white p-4 rounded shadow-sm" style="max-width: 500px;">
+
+        <h5 class="fw-bold">Statut :</h5>
+        {% if bed.status == 'available' %}
+            <span class="badge bg-success">Disponible</span>
+        {% elseif bed.status == 'occupied' %}
+            <span class="badge bg-danger">Occupé</span>
+        {% else %}
+            <span class="badge bg-warning text-dark">Maintenance</span>
+        {% endif %}
+
+        <h5 class="fw-bold mt-4">Chambre :</h5>
+        <p>{{ bed.room.name }}</p>
+
+        <div class="mt-4">
+            <a href="{{ path('app_bed_edit', {id: bed.id}) }}" class="btn btn-secondary">Modifier</a>
+            <a href="{{ path('app_bed_delete', {id: bed.id}) }}" class="btn btn-danger">Supprimer</a>
+            <a href="{{ path('app_room_show', {id: bed.room.id}) }}" class="btn btn-outline-primary">Retour à la chambre</a>
+        </div>
+
+    </div>
+{% endblock %}

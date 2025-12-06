@@ -1,0 +1,27 @@
+{% extends 'pms/pms_base.html.twig' %}
+
+{% block title %}{{ amenity.name }}{% endblock %}
+
+{% block body %}
+    <section class="min-vh-100 d-flex align-items-center justify-content-center" style="background: #f3f4f6;">
+        <div class="card shadow-lg border-0 rounded-4 p-5 text-center" style="max-width: 600px; width: 100%;">
+            <h2 class="fw-bold text-dark mb-4">{{ amenity.name }}</h2>
+
+            <p class="text-muted">Cette commodité est disponible dans certaines chambres.</p>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="{{ path('app_amenity') }}" class="btn btn-outline-secondary px-4">← Retour</a>
+                <div>
+                    <a href="{{ path('app_amenity_edit', {'id': amenity.id}) }}" class="btn btn-primary px-4 me-2">Modifier</a>
+                    <a href="{{ path('app_amenity_delete', {'id': amenity.id}) }}" class="btn btn-danger px-4"
+                       onclick="return confirm('Supprimer cette commodité ?')">Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        body { background-color: #f3f4f6; font-family: "Inter", sans-serif; }
+        .card { background: #fff; border-radius: 1rem; }
+    </style>
+{% endblock %}

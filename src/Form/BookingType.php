@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -39,7 +40,7 @@ class BookingType extends AbstractType
                 'label' => "Date de départ",
             ])
 
-            ->add('bedsBooked', IntegerType::class, [
+            ->add('numberOfBedsReserved', IntegerType::class, [
                 'label' => 'Nombre de lits réservés',
                 'attr' => [
                     'class' => 'form-control',
@@ -67,6 +68,7 @@ class BookingType extends AbstractType
                     'readonly' => true
                 ],
             ])
+
         ;
     }
 

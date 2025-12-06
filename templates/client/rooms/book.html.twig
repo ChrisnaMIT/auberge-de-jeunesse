@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">
+            Réservation — {{ room.name }}
+        </h1>
+
+        <p class="mb-4 text-gray-600">
+            Date sélectionnée : <strong>{{ date }}</strong>
+        </p>
+
+        <form method="post">
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Date d'arrivée</label>
+                <input type="text" name="checkin" class="datepicker border p-2 w-64"
+                       value="{{ date }}">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Date de départ</label>
+                <input type="text" name="checkout" class="datepicker border p-2 w-64">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Nombre de lits</label>
+                <input type="number" name="beds" class="border p-2 w-20" min="1" max="{{ room.beds|length }}" value="1">
+            </div>
+
+            <button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">
+                Réserver
+            </button>
+        </form>
+    </div>
+
+{% endblock %}

@@ -18,7 +18,15 @@ class RoomType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('type')
+            ->add('type', ChoiceType::class, [
+                'choices' => [
+                    'Chambre privée' => 'Chambre privée',
+                    'Dortoir' => 'Dortoir',
+                    'Suite' => 'suite',
+                ],
+                'label' => 'Type de chambre',
+            ])
+
             ->add('pricePerNight')
             ->add('description')
             ->add('amenities', EntityType::class, [

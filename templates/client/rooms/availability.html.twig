@@ -1,0 +1,293 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Disponibilités — {{ room.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="max-w-5xl mx-auto py-10">
+
+        <h1 class="text-4xl font-bold mb-6 text-gray-900">
+            Disponibilités — {{ room.name }}
+        </h1>
+
+        <p class="text-gray-600 text-lg mb-8">
+            Prix : <strong>{{ room.pricePerNight }} €</strong> / nuit <br>
+            Nombre total de lits : <strong>{{ room.beds|length }}</strong>
+        </p>
+
+        <a href="{{ path('client_rooms') }}">Retour</a>
+
+        <div id="calendar"></div>
+
+        <div id="booking-panel"
+             style="display:none; margin-top:20px; padding:20px; border:1px solid #ccc; border-radius:10px;">
+            <h3>Votre réservation</h3>
+            <p>Date d'arrivée : <span id="start-date"></span></p>
+            <p>Date de départ : <span id="end-date"></span></p>
+
+            <label>Nombre de lits :</label>
+            <input type="number" id="beds" min="1" value="1">
+
+            <br><br>
+            <a id="booking-link" class="btn btn-primary">Réserver</a>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const calendarEl = document.getElementById('calendar');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'fr',
+                height: 'auto',
+
+
+                selectable: false,
+                selectMirror: false,
+                longPressDelay: 999999,
+                selectAllow: () => false,
+
+
+                editable: false,
+                eventStartAllow: () => false,
+                eventOverlap: false,
+                eventDurationEditable: false,
+                eventResizableFromStart: false,
+
+
+                dateClick: onDateClick,
+
+                events: "{{ path('api_room_availability', { id: room.id }) }}",
+
+                eventDidMount(info) {
+                    const beds = info.event.extendedProps.beds_available;
+                    const date = info.event.startStr;
+
+                    // On récupère la cellule du calendrier pour ce jour
+                    const cell = document.querySelector(`.fc-daygrid-day[data-date="${date}"]`);
+
+                    if (!cell) return;
+
+                    // On nettoie d’abord
+                    cell.classList.remove("day-green", "day-yellow", "day-red");
+
+                    // Code couleur
+                    if (beds === 0) {
+                        cell.classList.add("day-red");
+                    } else if (beds <= 3) {
+                        cell.classList.add("day-yellow");
+                    } else {
+                        cell.classList.add("day-green");
+                    }
+                }
+
+            });
+
+
+
+            let start = null;
+            let end = null;
+
+            calendar.render();
+
+            function onDateClick(info) {
+                const clicked = info.dateStr;
+
+                // Premier clic
+                if (start === null) {
+                    start = clicked;
+                    end = null;
+
+                    highlightStart(clicked);
+                    return;
+                }
+
+                // Deuxième clic
+                if (end === null) {
+                    end = clicked;
+
+                    // Si end < start → on inverse
+                    if (end < start) {
+                        [start, end] = [end, start];
+                    }
+
+                    clearHighlights();
+                    highlightRange(start, end);
+
+                    showBookingPanel(start, end);
+
+                    // Reset pour une prochaine sélection
+                    start = null;
+                    end = null;
+                }
+            }
+
+            // ---------- UI ----------
+            function highlightStart(date) {
+                clearHighlights();
+                const cell = document.querySelector(`[data-date="${date}"]`);
+                if (cell) cell.classList.add("selected-start");
+
+            }
+
+            function highlightRange(start, end) {
+                const cells = document.querySelectorAll(".fc-daygrid-day[data-date]");
+                cells.forEach(cell => {
+                    const d = cell.getAttribute("data-date");
+                    if (d >= start && d <= end) {
+                        cell.classList.add("selected-range");
+                    }
+                });
+            }
+
+
+            function clearHighlights() {
+                document.querySelectorAll(".fc-daygrid-day[data-date]").forEach(cell => {
+                    cell.classList.remove("selected-start", "selected-range");
+                });
+            }
+
+        });
+
+        // ---- PANEL RESERVATION ----
+        function showBookingPanel(start, end) {
+            document.getElementById("start-date").textContent = start;
+            document.getElementById("end-date").textContent = end;
+
+            const roomId = "{{ room.id }}";
+            const url = `/rooms/${roomId}/book?start=${start}&end=${end}`;
+
+            document.getElementById("booking-link").href = url;
+            document.getElementById("booking-panel").style.display = "block";
+        }
+    </script>
+
+    <style>
+
+        /* --- GLOBAL CALENDAR STYLE --- */
+        #calendar {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .fc {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        /* --- HEADER (mois, boutons) --- */
+        .fc-toolbar-title {
+            font-size: 26px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .fc-button {
+            background: #2563eb !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 6px 14px !important;
+            color: white !important;
+            font-weight: 500;
+            transition: 0.2s ease;
+        }
+
+        .fc-button:hover {
+            background: #1d4ed8 !important;
+        }
+
+        /* --- DAYS CELLS --- */
+        .fc-daygrid-day {
+            background: #f8fafc;
+            border-radius: 10px;
+            transition: 0.2s ease;
+        }
+
+        /* hover sur un jour */
+        .fc-daygrid-day:hover {
+            background: #eef2ff !important;
+            cursor: pointer;
+        }
+
+        /* header des jours (lun, mar…) */
+        .fc-col-header-cell {
+            background: #f1f5f9 !important;
+            padding: 8px 0 !important;
+        }
+
+        .fc-col-header-cell-cushion {
+            font-weight: 600;
+            color: #334155;
+        }
+
+
+        .fc-event {
+            border-radius: 6px !important;
+            border: none !important;
+            font-size: 13px !important;
+            padding: 2px 8px !important;
+            text-align: center;
+            background: #e2e8f0 !important;
+            color: #1e293b !important;
+        }
+
+
+        .selected-start {
+            outline: 3px solid #2563eb !important;
+            outline-offset: -3px;
+            background: rgba(37,99,235,0.15) !important;
+        }
+
+
+        .selected-range {
+            background: rgba(37,99,235,0.25) !important;
+            outline: 2px solid #1d4ed8 !important;
+            outline-offset: -2px;
+        }
+
+        /* Rouge : complet */
+        .day-red {
+            background-color: #fee2e2 !important;
+            outline: 2px solid #dc2626 !important;
+        }
+        .day-red .fc-daygrid-day-number {
+            color: #991b1b !important;
+            font-weight: bold;
+        }
+
+        /* Jaune : presque complet */
+        .day-yellow {
+            background-color: #fef3c7 !important;
+            outline: 2px solid #d97706 !important;
+        }
+        .day-yellow .fc-daygrid-day-number {
+            color: #92400e !important;
+            font-weight: bold;
+        }
+
+        /* Vert : beaucoup de lits */
+        .day-green {
+            background-color: #dcfce7 !important;
+            outline: 2px solid #16a34a !important;
+        }
+        .day-green .fc-daygrid-day-number {
+            color: #166534 !important;
+            font-weight: bold;
+        }
+
+
+
+
+    </style>
+
+
+
+
+{% endblock %}
+

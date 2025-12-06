@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Modules\Room\Entity;
+namespace App\Entity;
 
-use App\Modules\Room\Repository\BedRepository;
+use App\Repository\BedRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BedRepository::class)]
@@ -13,8 +15,9 @@ class Bed
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $number = null;
+    #[ORM\Column(type: 'integer')]
+    private ?int $number = null;
+
 
     #[ORM\Column(length: 50, options: ['default' => 'available'])]
     private string $status = 'available';
@@ -22,6 +25,15 @@ class Bed
     #[ORM\ManyToOne(inversedBy: 'beds')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
+
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'beds')]
+    private Collection $booking;
+
+    public function __construct()
+    {
+        $this->booking = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -63,4 +75,20 @@ class Bed
 
         return $this;
     }
+
+    public function getBookings(): Collection
+    {
+        return $this->booking;
+    }
+
+    public function addBooking(Booking $booking): static
+    {
+        if (!$this->booking->contains($booking)) {
+            $this->booking->add($booking);
+            $booking->addBed($this);
+        }
+
+        return $this;
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Booking;
+use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,17 @@ class BookingRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function findActiveBookingsForRoomOnDate(Room $room, \DateTime $date): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.room = :room')
+            ->andWhere(':date BETWEEN b.checkIn AND b.checkOut')
+            ->setParameter('room', $room)
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
 }
